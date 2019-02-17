@@ -1,0 +1,46 @@
+STAN NA POCZ¥TKU GRY
+
+Gra 2-osobowa
+Na stole zostaje po 4 znaczniki klejnotów i 5 znaczników z³ota, 3 p³ytki arystokratów, 4 x karta poziomu I,  4 x karta poziomu II,  4 x karta poziomu III
+
+Gra 3-osobowa
+Na stole zostaje po 5 znaczniki klejnotów i 5 znaczników z³ota, 4 p³ytki arystokratów, 4 x karta poziomu I,  4 x karta poziomu II,  4 x karta poziomu III
+
+Gra 4 i wiêcej -osobowa
+Na stole zostaje po 7 znaczniki klejnotów i 5 znaczników z³ota, (liczba graczy + 1) p³ytki arystokratów, 4 x karta poziomu I,  4 x karta poziomu II,  4 x karta poziomu III
+
+ZNACZNIKI
+To waluta, za któr¹ mo¿na kupowaæ karty rozwoju. Na koniec swojej tury gracz nie mo¿e posiadaæ wiêcej ni¿ 10 znaczników. 
+KARTY ROZWOJU
+Kartu rozwoju gracz pozyskuje, aby zebraæ punkty presti¿u. Dziêki kartom gracz zdobywa bonusy i punkty presti¿u. 
+Za karty mo¿na p³aciæ znacznikami lub bonusami wynikaj¹cymi z zebranych wczeœniej kart rozwoju. O ile znaczniki po zakupie trafiaj¹ do skarbca, 
+bonusy pozostaj¹ w rêku gracza. Gracz mo¿e w ca³oœci zap³aciæ bonusami za kartê rozwoju, nie wydaj¹c znaczników.
+Gracze mogê rezerwowaæ karty rozwoju i wykupiæ je w póŸniejszym okresie.
+
+rezerwacja karty rozwoju
+Gracz mo¿e zarezerwowaæ jedn¹ z kart odkrytych na stole lub wzi¹æ pierwsz¹ z jednego ze stosów. 
+W przypadku kart ze stosu, gracz nie pokazuje jej treœci pozosta³ym graczom. Gracz nie mo¿e zrezygnowaæ z rezerwacjo. Mo¿e j¹ jedynie wykupiæ. 
+Gracz nie mo¿e posiadaæ wiêcej ni¿ 3 rezerwacje w danym momencie gry.
+Rezerwacja jest jedynym sposobem na zdobycie znacznika z³ota. Jeœli w stosie nie ma znaczników z³ota, gracz mo¿e rezerwowaæ kartê, ale nie otrzyma z³ota.
+
+zakup karty rozwoju
+Gracz mo¿e kupiæ jedn¹ z odkrytych kart rozwoju lub kartê zarezerwowan¹. W calu kupienia karty gracz musi oddaæ liczbê i rodzaj znaczników wskazanych na karcie. Znacznik z³ota mo¿e zast¹piæ ka¿dy 
+inny znacznik klejnotu. Znaczniki, którymi dokonano zakupu nale¿y od³o¿yæ do skarbca na stole.
+
+
+KARTY ARYSTOKRATÓW
+Karty arystokratów le¿¹ przez ca³y czas trwania rozgrywki na stole. Jeœli na koniec swojej tury gracz posiada liczbê bonusów wskazan¹ na karcie któregoœ z arystokratów, 
+natychmiast podejmuje go z wizyt¹ i otrzymuje jego p³ytkê, a dziêki niej zyskuje punkty presti¿u. Gracz nie mo¿e odmówiæ wizyty, mo¿e pozyskaæ tylko 1 p³ytkê
+na turê.Jeœli bonusy pozwalaj¹ na wziêcie wiêcej ni¿ 1 karty arystokratów, gracz musi wybraæ 1 z nich.
+
+
+CEL GRY
+Grê wygrywa gracz, który jako pierwszy zdobêdzie 15 punktów presti¿u. W momencie kiedy któryœ z graczy zdobêdzie 15 punktów presti¿u nale¿y dokoñczyæ rundê tak, aby ka¿dy z graczy mia³ tak¹ sam¹ liczbê tur. 
+W przypadku remisu wygrywa ten z graczy, który kupi³ najmniejsz¹ liczbê kart rozwoju. Nie mo¿e wygraæ gry gracz 
+
+ZASADY GRY
+Grê rozpoczyna najm³odszy z graczy, nastêpnie kolejka toczy siê zgodnie z ruchem wskazówek zegara. W swojej turze gracz musi wykonaæ 1 z 4 akcji:
+wzi¹æ 3 znaczniki klejnotów ró¿nych kolorów
+wzi¹æ 2 znaczniki klejnotów tego samego koloru (Uwaga! ta akcja mo¿liwa jest tylko wtedy, kiedy przed akcj¹ w stosie wybranego koloru znajduj¹ siê co najmniej 4 znaczniki)
+zarezerwowaæ 1 kartê rozwoju i wzi¹æ 1 znacznik z³ota
+zakupiæ 1 odkryt¹ kartê rozwoju lub zarezerwowan¹ ze swojej rêki
