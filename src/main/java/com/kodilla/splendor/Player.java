@@ -8,6 +8,7 @@ public class Player {
 
     private String name;
     private int result;
+    private int movesCounter = 0;
 
     private HashMap<Colors, Integer> cardCounter = new HashMap<>();
     private HashMap<Colors, Integer> jewelCounter = new HashMap<>();
@@ -19,18 +20,16 @@ public class Player {
         this.result = result;
 
         cardCounter.put(Colors.BLACK, 5);
-        cardCounter.put(Colors.BLUE, 4);
-        cardCounter.put(Colors.RED, 6);
-        cardCounter.put(Colors.WHITE, 6);
-        cardCounter.put(Colors.GREEN, 4);
+        cardCounter.put(Colors.BLUE, 5);
+        cardCounter.put(Colors.RED, 5);
+        cardCounter.put(Colors.WHITE, 5);
+        cardCounter.put(Colors.GREEN, 5);
 
-        jewelCounter.put(Colors.BLACK, 8);
+        jewelCounter.put(Colors.BLACK, 10);
         jewelCounter.put(Colors.BLUE, 10);
-        jewelCounter.put(Colors.RED, 17);
-        jewelCounter.put(Colors.WHITE, 7);
-        jewelCounter.put(Colors.GREEN, 8);
-
-
+        jewelCounter.put(Colors.RED, 10);
+        jewelCounter.put(Colors.WHITE, 10);
+        jewelCounter.put(Colors.GREEN, 10);
 
     }
 
@@ -52,6 +51,14 @@ public class Player {
 
     public HashMap<Colors, Integer> getJewelCounter() {
         return jewelCounter;
+    }
+
+    public int getMovesCounter() {
+        return movesCounter;
+    }
+
+    public void setMovesCounter(int movesCounter) {
+        this.movesCounter = movesCounter;
     }
 
     public void setResult(int result) {

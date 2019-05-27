@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Cards1LevelRepository {
 
@@ -59,41 +60,41 @@ public class Cards1LevelRepository {
         _3black_3w_3b_5g_3rCost.put(Colors.GREEN, 5);
         _3black_3w_3b_5g_3rCost.put(Colors.WHITE, 3);
 
-        _3blue__3w_3g_3r_5bcCost.put(Colors.BLUE, 3);
-        _3blue__3w_3g_3r_5bcCost.put(Colors.BLACK, 0);
+        _3blue__3w_3g_3r_5bcCost.put(Colors.BLUE, 0);
+        _3blue__3w_3g_3r_5bcCost.put(Colors.BLACK, 5);
         _3blue__3w_3g_3r_5bcCost.put(Colors.RED, 3);
-        _3blue__3w_3g_3r_5bcCost.put(Colors.GREEN, 5);
+        _3blue__3w_3g_3r_5bcCost.put(Colors.GREEN, 3);
         _3blue__3w_3g_3r_5bcCost.put(Colors.WHITE, 3);
 
         _3green_5w_3b_3r_3bcCost.put(Colors.BLUE, 3);
-        _3green_5w_3b_3r_3bcCost.put(Colors.BLACK, 0);
+        _3green_5w_3b_3r_3bcCost.put(Colors.BLACK, 3);
         _3green_5w_3b_3r_3bcCost.put(Colors.RED, 3);
-        _3green_5w_3b_3r_3bcCost.put(Colors.GREEN, 5);
-        _3green_5w_3b_3r_3bcCost.put(Colors.WHITE, 3);
+        _3green_5w_3b_3r_3bcCost.put(Colors.GREEN, 0);
+        _3green_5w_3b_3r_3bcCost.put(Colors.WHITE, 5);
 
-        _3red_3w_5b_3g_3bcCost.put(Colors.BLUE, 3);
-        _3red_3w_5b_3g_3bcCost.put(Colors.BLACK, 0);
-        _3red_3w_5b_3g_3bcCost.put(Colors.RED, 3);
-        _3red_3w_5b_3g_3bcCost.put(Colors.GREEN, 5);
+        _3red_3w_5b_3g_3bcCost.put(Colors.BLUE, 5);
+        _3red_3w_5b_3g_3bcCost.put(Colors.BLACK, 3);
+        _3red_3w_5b_3g_3bcCost.put(Colors.RED, 0);
+        _3red_3w_5b_3g_3bcCost.put(Colors.GREEN, 3);
         _3red_3w_5b_3g_3bcCost.put(Colors.WHITE, 3);
 
         _3white_3b_3g_5r_3bcCost.put(Colors.BLUE, 3);
-        _3white_3b_3g_5r_3bcCost.put(Colors.BLACK, 0);
-        _3white_3b_3g_5r_3bcCost.put(Colors.RED, 3);
-        _3white_3b_3g_5r_3bcCost.put(Colors.GREEN, 5);
-        _3white_3b_3g_5r_3bcCost.put(Colors.WHITE, 3);
+        _3white_3b_3g_5r_3bcCost.put(Colors.BLACK, 3);
+        _3white_3b_3g_5r_3bcCost.put(Colors.RED, 5);
+        _3white_3b_3g_5r_3bcCost.put(Colors.GREEN, 3);
+        _3white_3b_3g_5r_3bcCost.put(Colors.WHITE, 0);
 
         _4black_3g_6r_3bcCost.put(Colors.BLUE, 3);
-        _4black_3g_6r_3bcCost.put(Colors.BLACK, 0);
-        _4black_3g_6r_3bcCost.put(Colors.RED, 3);
-        _4black_3g_6r_3bcCost.put(Colors.GREEN, 5);
-        _4black_3g_6r_3bcCost.put(Colors.WHITE, 3);
+        _4black_3g_6r_3bcCost.put(Colors.BLACK, 3);
+        _4black_3g_6r_3bcCost.put(Colors.RED, 6);
+        _4black_3g_6r_3bcCost.put(Colors.GREEN, 0);
+        _4black_3g_6r_3bcCost.put(Colors.WHITE, 0);
 
-        _4black_7rCost.put(Colors.BLUE, 3);
+        _4black_7rCost.put(Colors.BLUE, 0);
         _4black_7rCost.put(Colors.BLACK, 0);
-        _4black_7rCost.put(Colors.RED, 3);
-        _4black_7rCost.put(Colors.GREEN, 5);
-        _4black_7rCost.put(Colors.WHITE, 3);
+        _4black_7rCost.put(Colors.RED, 7);
+        _4black_7rCost.put(Colors.GREEN, 0);
+        _4black_7rCost.put(Colors.WHITE, 0);
 
         cardsList.add(_3black_3w_3b_5g_3rCard);
         cardsList.add(_3blue__3w_3g_3r_5bcCard);
@@ -163,16 +164,23 @@ public class Cards1LevelRepository {
 
         boolean ifCardTaken = false;
 
-        long costCheckCounter = card.getCost().entrySet().stream()
+        Map<Colors, Integer> costAfterCards = card.getCost().entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue() - player.getCardCounter().get(e.getKey())))
+                .entrySet().stream()
+                .filter(c -> c.getValue() > 0)
+                .collect(Collectors.toMap(c -> c.getKey(), c -> c.getValue()));
+
+        long costCheckCounter = costAfterCards.entrySet().stream()
                 .filter(e -> player.getJewelCounter().get(e.getKey()) >= e.getValue())
                 .count();
+        long costAfterCardsSize = costAfterCards.size();
 
-        if (costCheckCounter == 5L) {
+        if (costCheckCounter == costAfterCardsSize) {
             player.setResult(player.getResult() + card.getValue());
             int cardNumber = player.getCardCounter().get(card.getColor());
             player.getCardCounter().replace(card.getColor(), cardNumber +1 );
-            player.getJewelCounter().entrySet().stream()
-                    .forEach( e -> e.setValue(e.getValue() - card.getCost().get(e.getKey())));
+            costAfterCards.entrySet().stream()
+                    .forEach(e -> player.getJewelCounter().replace(e.getKey(), player.getJewelCounter().get(e.getKey())-e.getValue()));
             ifCardTaken = true;
             fourCards.set(position, drawCard());
         }
