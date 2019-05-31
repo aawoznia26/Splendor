@@ -136,7 +136,6 @@ public class AristocratsRepository {
 
     }
 
-
     public void drawThreeAristocrats() {
         Aristocrats aristocrat1 = drawAristocrat();
         Aristocrats aristocrat2 = drawAristocrat();

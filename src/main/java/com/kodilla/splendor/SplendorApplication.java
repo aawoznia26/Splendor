@@ -17,16 +17,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class SplendorApplication extends Application {
 
     private Image imageback = new Image("1985-52-15143-pdp.jpg");
 
+    //Players
+    private PlayerCreator playerCreator = new PlayerCreator();
     private List<Player> players = new ArrayList<>();
     private Player player;
     private Player player1;
@@ -34,49 +34,40 @@ public class SplendorApplication extends Application {
     private Player player1Saved;
     private Player player2Saved;
 
+    private HBox player1NameAndPointsHB = new HBox();
+    private HBox player2NameAndPointsHB = new HBox();
 
-    public static final Scanner scanner = new Scanner(System.in);
-
-
+    //Move
     private int diamondTaken = 0;
     private int sapphireTaken = 0;
     private int onyxTaken = 0;
     private int emeraldTaken = 0;
     private int rubyTaken = 0;
-
     private int cardTaken = 0;
     private int aristocratsTaken = 0;
 
     private Button player1CommitButton = new Button();
     private Button player2CommitButton = new Button();
-
-    private HBox jewels = new HBox();
-    private HBox aristocrats = new HBox();
-    private HBox player1Jewels = new HBox();
-    private HBox player2Jewels = new HBox();
-    private HBox cards3 = new HBox();
-    private HBox cards2 = new HBox();
-    private HBox cards1 = new HBox();
-    private HBox player1Aristocrats = new HBox();
-    private HBox player2Aristocrats = new HBox();
-    private HBox player1JewelsCards = new HBox();
-    private HBox player2JewelsCards = new HBox();
-
-    private HBox player1NameAndPointsHB = new HBox();
-    private HBox player2NameAndPointsHB = new HBox();
-
     private HBox player1CommitHB = new HBox();
     private HBox player2CommitHB = new HBox();
 
+    //Jewel
+    private JewelRepository jewelRepository = new JewelRepository();
+    private JewelRepository savedJewelRepository;
 
-    private HBox player1CardsTextHB = new HBox();
-    private HBox player1JewelsTextHB = new HBox();
+    private HBox jewels = new HBox();
+    private HBox player1Jewels = new HBox();
+    private HBox player2Jewels = new HBox();
 
-    private HBox player2CardsTextHB = new HBox();
-    private HBox player2JewelsTextHB = new HBox();
-
+    //Aristocrats
     private AristocratsRepository aristocratsRepository = new AristocratsRepository();
     private AristocratsRepository savedAristocratsRepository;
+    private HBox aristocrats = new HBox();
+    private HBox player1Aristocrats = new HBox();
+    private HBox player2Aristocrats = new HBox();
+    private HBox player1JewelsTextHB = new HBox();
+    private HBox player2JewelsTextHB = new HBox();
+
     private Aristocrats aristocrat1 = new Aristocrats();
     private Aristocrats aristocrat2 = new Aristocrats();
     private Aristocrats aristocrat3 = new Aristocrats();
@@ -85,6 +76,7 @@ public class SplendorApplication extends Application {
     private Button aristocrat2Button = new Button();
     private Button aristocrat3Button = new Button();
 
+    //Cards
     private Cards1LevelRepository cards1LevelRepository = new Cards1LevelRepository();
     private Cards2LevelRepository cards2LevelRepository = new Cards2LevelRepository();
     private Cards3LevelRepository cards3LevelRepository = new Cards3LevelRepository();
@@ -92,6 +84,14 @@ public class SplendorApplication extends Application {
     private Cards1LevelRepository savedCards1LevelRepository;
     private Cards2LevelRepository savedCards2LevelRepository;
     private Cards3LevelRepository savedCards3LevelRepository;
+
+    private HBox cards1 = new HBox();
+    private HBox cards2 = new HBox();
+    private HBox cards3 = new HBox();
+    private HBox player1JewelsCards = new HBox();
+    private HBox player2JewelsCards = new HBox();
+    private HBox player1CardsTextHB = new HBox();
+    private HBox player2CardsTextHB = new HBox();
 
     private Cards1Level cards1Level1 = new Cards1Level();
     private Cards1Level cards1Level2 = new Cards1Level();
@@ -108,49 +108,27 @@ public class SplendorApplication extends Application {
     private Cards3Level cards3Level3 = new Cards3Level();
     private Cards3Level cards3Level4 = new Cards3Level();
 
+    private Button card1Level1Button = new Button();
+    private Button card1Level2Button = new Button();
+    private Button card1Level3Button = new Button();
+    private Button card1Level4Button = new Button();
 
-    private JewelRepository jewelRepository = new JewelRepository();
-    private JewelRepository savedJewelRepository;
+    private Button card2Level1Button = new Button();
+    private Button card2Level2Button = new Button();
+    private Button card2Level3Button = new Button();
+    private Button card2Level4Button = new Button();
+
+    private Button card3Level1Button = new Button();
+    private Button card3Level2Button = new Button();
+    private Button card3Level3Button = new Button();
+    private Button card3Level4Button = new Button();
 
 
-    Button card1Level1Button = new Button();
-    Button card1Level2Button = new Button();
-    Button card1Level3Button = new Button();
-    Button card1Level4Button = new Button();
-
-    Button card2Level1Button = new Button();
-    Button card2Level2Button = new Button();
-    Button card2Level3Button = new Button();
-    Button card2Level4Button = new Button();
-
-    Button card3Level1Button = new Button();
-    Button card3Level2Button = new Button();
-    Button card3Level3Button = new Button();
-    Button card3Level4Button = new Button();
-
+    //Rest
     DropShadow shadow = new DropShadow();
+    InfoPopUp infoPopUp = new InfoPopUp();
 
 
-    public List<Player> createPlayers() {
-
-        System.out.println("Enter Player 1 name");
-
-        String player1Name = scanner.next();
-
-        System.out.println("Enter Player 2 name");
-
-        String player2Name = scanner.next();
-
-        player1 = new Player(player1Name, 0);
-        player2 = new Player(player2Name, 0);
-        players.add(0, player1);
-        players.add(1, player2);
-
-        saveCurrentStatus();
-
-        return players;
-
-    }
 
     public boolean finishGame() {
         if ((player1.getResult() >= 15 || player2.getResult() >= 15) && (player1.getMovesCounter() == player2.getMovesCounter())) {
@@ -160,7 +138,7 @@ public class SplendorApplication extends Application {
             } else {
                 winner = player2;
             }
-            System.out.println("Game finished. The winner is " + winner.getName());
+            infoPopUp.display("INFO", "Game finished. The winner is " + winner.getName());
             return true;
         }
         return false;
@@ -211,8 +189,8 @@ public class SplendorApplication extends Application {
 
         } else {
             rollBackMove();
-            player1 = players.get(0);
-            player2 = players.get(1);
+            player1 = playerCreator.getPlayers().get(0);
+            player2 = playerCreator.getPlayers().get(1);
         }
         diamondTaken = 0;
         sapphireTaken = 0;
@@ -465,36 +443,32 @@ public class SplendorApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        createPlayers();
+        PlayerCreator playerCreator = new PlayerCreator();
+        playerCreator.createPlayers();
+        player1 = playerCreator.getPlayers().get(0);
+        player2 = playerCreator.getPlayers().get(1);
+        players.add(player1);
+        players.add(player2);
+        saveCurrentStatus();
         loadPlayersJewelCounters();
         player = player1;
+
+        //Background
         BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, true);
         BackgroundImage backgroundImage = new BackgroundImage(imageback, BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER, backgroundSize);
         Background background = new Background(backgroundImage);
 
+        //GridPanesAdding
         GridPane grid = new GridPane();
-        grid.setBackground(background);
-
-        grid.setAlignment(Pos.CENTER);
-        grid.setPadding(new Insets(8, 12, 8, 12));
-        grid.setHgap(15);
-        grid.setVgap(15);
-        grid.setBackground(background);
-
         GridPane gridPane1 = new GridPane();
-
         GridPane gridPane2 = new GridPane();
         GridPane gridPane3 = new GridPane();
-
-        gridPane1.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10;");
-        gridPane3.setStyle("-fx-background-color: rgba(139, 0, 0, 0.5); -fx-background-radius: 10;");
+        GridPane player1CardsGridPane = new GridPane();
+        GridPane player2CardsGridPane = new GridPane();
 
         grid.add(gridPane1, 0, 0, 1, 1);
         grid.add(gridPane2, 1, 0, 1, 1);
         grid.add(gridPane3, 2, 0, 1, 1);
-
-        GridPane player1CardsGridPane = new GridPane();
-        GridPane player2CardsGridPane = new GridPane();
 
         gridPane1.add(player1NameAndPointsHB, 0, 0, 1, 1);
         gridPane1.add(player1Jewels, 0, 6, 1, 1);
@@ -521,40 +495,18 @@ public class SplendorApplication extends Application {
         gridPane3.add(player2JewelsTextHB, 0, 5, 1, 1);
         gridPane3.add(player2CommitHB, 0, 7, 1, 1);
 
+        //GridPanesSettingUp
+        grid.setBackground(background);
+        grid.setAlignment(Pos.CENTER);
+        grid.setPadding(new Insets(8, 12, 8, 12));
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setBackground(background);
 
-        player1CardsGridPane.setAlignment(Pos.CENTER);
-        player2CardsGridPane.setAlignment(Pos.CENTER);
+        gridPane1.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10;");
+        gridPane3.setStyle("-fx-background-color: rgba(139, 0, 0, 0.5); -fx-background-radius: 10;");
 
-        player1CardsTextHB.setAlignment(Pos.CENTER);
-        player2CardsTextHB.setAlignment(Pos.CENTER);
-
-        player1JewelsTextHB.setAlignment(Pos.CENTER);
-        player2JewelsTextHB.setAlignment(Pos.CENTER);
-
-
-        jewels.setAlignment(Pos.BOTTOM_CENTER);
-        jewels.setPrefWidth(500);
-        cards1.setAlignment(Pos.TOP_CENTER);
-        cards2.setAlignment(Pos.TOP_CENTER);
-        cards3.setAlignment(Pos.TOP_CENTER);
-        aristocrats.setAlignment(Pos.TOP_CENTER);
-        aristocrats.setPrefWidth(500);
-
-        player1Jewels.setAlignment(Pos.BOTTOM_CENTER);
-        player1JewelsCards.setAlignment(Pos.TOP_CENTER);
-        player1JewelsCards.setPrefHeight(150);
-        player1Aristocrats.setAlignment(Pos.CENTER);
-        player1Aristocrats.setPrefWidth(400);
-        player1Aristocrats.setPrefHeight(250);
-
-
-        player2Jewels.setAlignment(Pos.BOTTOM_CENTER);
-        player2JewelsCards.setAlignment(Pos.TOP_CENTER);
-        player2JewelsCards.setPrefHeight(150);
-        player2Aristocrats.setAlignment(Pos.CENTER);
-        player2Aristocrats.setPrefWidth(400);
-        player2Aristocrats.setPrefHeight(250);
-
+        //Move
         player1CommitHB.setAlignment(Pos.BOTTOM_RIGHT);
         player1CommitHB.setPrefHeight(150);
         player1CommitHB.setPadding(new Insets(30, 30, 30, 30));
@@ -562,21 +514,85 @@ public class SplendorApplication extends Application {
         player2CommitHB.setPrefHeight(150);
         player2CommitHB.setPadding(new Insets(30, 30, 30, 30));
 
+        //Jewel
+        player1JewelsTextHB.setAlignment(Pos.CENTER);
+        player2JewelsTextHB.setAlignment(Pos.CENTER);
+        jewels.setAlignment(Pos.BOTTOM_CENTER);
+        jewels.setPrefWidth(500);
+        player1Jewels.setAlignment(Pos.BOTTOM_CENTER);
+        player1JewelsCards.setAlignment(Pos.TOP_CENTER);
+        player1JewelsCards.setPrefHeight(150);
+        player2Jewels.setAlignment(Pos.BOTTOM_CENTER);
+        player2JewelsCards.setAlignment(Pos.TOP_CENTER);
+        player2JewelsCards.setPrefHeight(150);
+
+        //Aristocrats
+        aristocrats.setAlignment(Pos.TOP_CENTER);
+        aristocrats.setPrefWidth(500);
+        player1Aristocrats.setAlignment(Pos.CENTER);
+        player1Aristocrats.setPrefWidth(400);
+        player1Aristocrats.setPrefHeight(250);
+        player2Aristocrats.setAlignment(Pos.CENTER);
+        player2Aristocrats.setPrefWidth(400);
+        player2Aristocrats.setPrefHeight(250);
+
+        //Cards
+        player1CardsGridPane.setAlignment(Pos.CENTER);
+        player2CardsGridPane.setAlignment(Pos.CENTER);
+        player1CardsTextHB.setAlignment(Pos.CENTER);
+        player2CardsTextHB.setAlignment(Pos.CENTER);
+        cards1.setAlignment(Pos.TOP_CENTER);
+        cards2.setAlignment(Pos.TOP_CENTER);
+        cards3.setAlignment(Pos.TOP_CENTER);
+
+
         final String BUTTON_STYLE = "-fx-background-color: transparent;";
         final String JEWEL_BUTTON_STYLE = "-fx-background-color: transparent; -fx-text-fill: #D4AF37;";
         final String COMMIT_BUTTON_STYLE = "-fx-background-color: black; -fx-text-fill: #D4AF37;-fx-font-size: 20";
         final String HOVERED_BUTTON_STYLE = "-fx-background-color: rgba(212,175,55,0.5);";
 
+        //Scene
         Scene scene = new Scene(grid, 1200, 600, Color.BLUEVIOLET);
 
         primaryStage.setTitle("Splendor");
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        //MoveCommitButtons
+        player1CommitButton.setStyle(COMMIT_BUTTON_STYLE);
+        player1CommitButton.setOnMouseEntered(e -> player1CommitButton.setEffect(shadow));
+        player1CommitButton.setOnMouseExited(e -> player1CommitButton.setEffect(null));
+        player1CommitButton.setText("Commit move");
+        player1CommitButton.setOnAction((e) -> {
+            if(commitMove()){
+                gridPane1.setEffect(null);
+                gridPane3.setEffect(shadow);
+            };
+            if(finishGame()){
+                primaryStage.close();
+            };
+        });
 
-        //PlayersNames&Points
+
+        player2CommitButton.setStyle(COMMIT_BUTTON_STYLE);
+        player2CommitButton.setOnMouseEntered(e -> player2CommitButton.setEffect(shadow));
+        player2CommitButton.setOnMouseExited(e -> player2CommitButton.setEffect(null));
+        player2CommitButton.setText("Commit move");
+        player2CommitButton.setOnAction((e) -> {
+            if(commitMove()){
+                gridPane3.setEffect(null);
+                gridPane1.setEffect(shadow);
+            } ;
+            if(finishGame()){
+                primaryStage.close();
+            };
+        });
+
+        player1CommitHB.getChildren().add(player1CommitButton);
+        player2CommitHB.getChildren().add(player2CommitButton);
 
 
+        //Players
         Text player1NameAndPoints = new Text();
         player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
         player1NameAndPoints.setTextAlignment(TextAlignment.CENTER);
@@ -597,59 +613,7 @@ public class SplendorApplication extends Application {
         player2NameAndPointsHB.setAlignment(Pos.TOP_CENTER);
         player2NameAndPointsHB.getChildren().add(player2NameAndPoints);
 
-
-        //Aristocrats
-        drawAristocrates();
-        loadAristocrats();
-
-        aristocrat1Button.setOnAction((e) -> {
-            if (aristocratsRepository.takeAristocrat(player, aristocrat1, 0)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                loadPlayersAristocrats();
-                loadAristocrats();
-                aristocratsTaken += 1;
-            }
-        });
-
-        aristocrat1Button.setStyle(BUTTON_STYLE);
-        aristocrat1Button.setOnMouseEntered(e -> aristocrat1Button.setStyle(HOVERED_BUTTON_STYLE));
-        aristocrat1Button.setOnMouseExited(e -> aristocrat1Button.setStyle(BUTTON_STYLE));
-
-        aristocrat2Button.setOnAction((e) -> {
-            if (aristocratsRepository.takeAristocrat(player, aristocrat2, 1)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                loadPlayersAristocrats();
-                loadAristocrats();
-                aristocratsTaken += 1;
-            }
-        });
-
-        aristocrat2Button.setStyle(BUTTON_STYLE);
-        aristocrat2Button.setOnMouseEntered(e -> aristocrat2Button.setStyle(HOVERED_BUTTON_STYLE));
-        aristocrat2Button.setOnMouseExited(e -> aristocrat2Button.setStyle(BUTTON_STYLE));
-
-
-        aristocrat3Button.setOnAction((e) -> {
-            if (aristocratsRepository.takeAristocrat(player, aristocrat3, 2)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                loadPlayersAristocrats();
-                loadAristocrats();
-                aristocratsTaken += 1;
-            }
-        });
-
-        aristocrat3Button.setStyle(BUTTON_STYLE);
-        aristocrat3Button.setOnMouseEntered(e -> aristocrat3Button.setStyle(HOVERED_BUTTON_STYLE));
-        aristocrat3Button.setOnMouseExited(e -> aristocrat3Button.setStyle(BUTTON_STYLE));
-
-        aristocrats.getChildren().addAll(aristocrat1Button, aristocrat2Button, aristocrat3Button);
-
-
-        //JewelsButtons
-
+        //Jewels_Buttons
         String diamondCounter = String.valueOf(jewelRepository.getDiamond().getNumber());
         String onyxCounter = String.valueOf(jewelRepository.getOnyx().getNumber());
         String saphireCounter = String.valueOf(jewelRepository.getSapphire().getNumber());
@@ -718,226 +682,7 @@ public class SplendorApplication extends Application {
             rubyTaken += 1;
         });
 
-
         jewels.getChildren().addAll(buttonDiamond, buttonOnyx, buttonSapphire, buttonRuby, buttonEmerald);
-
-
-        //3LevelCards
-        draw3LevelCards();
-        load3LevelCards();
-
-        card3Level1Button.setOnAction((e) -> {
-            if (cards3LevelRepository.takeCard(player, cards3Level1, 0)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load3LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-
-        card3Level1Button.setStyle(BUTTON_STYLE);
-        card3Level1Button.setOnMouseEntered(e -> card3Level1Button.setStyle(HOVERED_BUTTON_STYLE));
-        card3Level1Button.setOnMouseExited(e -> card3Level1Button.setStyle(BUTTON_STYLE));
-
-        card3Level2Button.setOnAction((e) -> {
-            if (cards3LevelRepository.takeCard(player, cards3Level2, 1)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load3LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-
-        card3Level2Button.setStyle(BUTTON_STYLE);
-        card3Level2Button.setOnMouseEntered(e -> card3Level2Button.setStyle(HOVERED_BUTTON_STYLE));
-        card3Level2Button.setOnMouseExited(e -> card3Level2Button.setStyle(BUTTON_STYLE));
-
-        card3Level3Button.setOnAction((e) -> {
-            if (cards3LevelRepository.takeCard(player, cards3Level3, 2)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load3LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-
-
-        card3Level3Button.setStyle(BUTTON_STYLE);
-        card3Level3Button.setOnMouseEntered(e -> card3Level3Button.setStyle(HOVERED_BUTTON_STYLE));
-        card3Level3Button.setOnMouseExited(e -> card3Level3Button.setStyle(BUTTON_STYLE));
-
-        card3Level4Button.setOnAction((e) -> {
-            if (cards3LevelRepository.takeCard(player, cards3Level4, 3)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load3LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-
-        card3Level4Button.setStyle(BUTTON_STYLE);
-        card3Level4Button.setOnMouseEntered(e -> card3Level4Button.setStyle(HOVERED_BUTTON_STYLE));
-        card3Level4Button.setOnMouseExited(e -> card3Level4Button.setStyle(BUTTON_STYLE));
-
-        cards3.getChildren().addAll(card3Level1Button, card3Level2Button, card3Level3Button, card3Level4Button);
-
-
-        //2LevelCards
-        draw2LevelCards();
-        load2LevelCards();
-
-        card2Level1Button.setOnAction((e) -> {
-            if (cards2LevelRepository.takeCard(player, cards2Level1, 0)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load2LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-        card2Level1Button.setStyle(BUTTON_STYLE);
-        card2Level1Button.setOnMouseEntered(e -> card2Level1Button.setStyle(HOVERED_BUTTON_STYLE));
-        card2Level1Button.setOnMouseExited(e -> card2Level1Button.setStyle(BUTTON_STYLE));
-
-
-        card2Level2Button.setOnAction((e) -> {
-            if (cards2LevelRepository.takeCard(player, cards2Level2, 1)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load2LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-        card2Level2Button.setStyle(BUTTON_STYLE);
-        card2Level2Button.setOnMouseEntered(e -> card2Level2Button.setStyle(HOVERED_BUTTON_STYLE));
-        card2Level2Button.setOnMouseExited(e -> card2Level2Button.setStyle(BUTTON_STYLE));
-
-
-        card2Level3Button.setOnAction((e) -> {
-            if (cards2LevelRepository.takeCard(player, cards2Level3, 2)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load2LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-        card2Level3Button.setStyle(BUTTON_STYLE);
-        card2Level3Button.setOnMouseEntered(e -> card2Level3Button.setStyle(HOVERED_BUTTON_STYLE));
-        card2Level3Button.setOnMouseExited(e -> card2Level3Button.setStyle(BUTTON_STYLE));
-
-
-        card2Level4Button.setOnAction((e) -> {
-            if (cards2LevelRepository.takeCard(player, cards2Level4, 3)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load2LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-
-            }
-        });
-        card2Level4Button.setStyle(BUTTON_STYLE);
-        card2Level4Button.setOnMouseEntered(e -> card2Level4Button.setStyle(HOVERED_BUTTON_STYLE));
-        card2Level4Button.setOnMouseExited(e -> card2Level4Button.setStyle(BUTTON_STYLE));
-
-        cards2.getChildren().addAll(card2Level1Button, card2Level2Button, card2Level3Button, card2Level4Button);
-
-
-        //1LevelCards
-        draw1LevelCards();
-        load1LevelCards();
-
-        card1Level1Button.setOnAction((e) -> {
-            if (cards1LevelRepository.takeCard(player, cards1Level1, 0)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load1LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-
-        card1Level1Button.setStyle(BUTTON_STYLE);
-        card1Level1Button.setOnMouseEntered(e -> card1Level1Button.setStyle(HOVERED_BUTTON_STYLE));
-        card1Level1Button.setOnMouseExited(e -> card1Level1Button.setStyle(BUTTON_STYLE));
-
-        card1Level2Button.setOnAction((e) -> {
-            if (cards1LevelRepository.takeCard(player, cards1Level2, 1)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load1LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-        card1Level2Button.setStyle(BUTTON_STYLE);
-        card1Level2Button.setOnMouseEntered(e -> card1Level2Button.setStyle(HOVERED_BUTTON_STYLE));
-        card1Level2Button.setOnMouseExited(e -> card1Level2Button.setStyle(BUTTON_STYLE));
-
-        card1Level3Button.setOnAction((e) -> {
-            if (cards1LevelRepository.takeCard(player, cards1Level3, 2)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load1LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-
-        card1Level3Button.setStyle(BUTTON_STYLE);
-        card1Level3Button.setOnMouseEntered(e -> card1Level3Button.setStyle(HOVERED_BUTTON_STYLE));
-        card1Level3Button.setOnMouseExited(e -> card1Level3Button.setStyle(BUTTON_STYLE));
-
-        card1Level4Button.setOnAction((e) -> {
-            if (cards1LevelRepository.takeCard(player, cards1Level4, 3)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                load1LevelCards();
-                loadPlayersCardsCounters();
-                loadPlayersJewelCounters();
-                cardTaken += 1;
-            }
-        });
-
-        card1Level4Button.setStyle(BUTTON_STYLE);
-        card1Level4Button.setOnMouseEntered(e -> card1Level4Button.setStyle(HOVERED_BUTTON_STYLE));
-        card1Level4Button.setOnMouseExited(e -> card1Level4Button.setStyle(BUTTON_STYLE));
-
-        cards1.getChildren().addAll(card1Level1Button, card1Level2Button, card1Level3Button, card1Level4Button);
-
-        //Player1CardsText
-        Text player1CardsText = new Text("Cards with jewel");
-        player1CardsTextHB.getChildren().add(player1CardsText);
-        player1CardsText.setFont(Font.loadFont("file:src/main/resources/AurelisADFNo2Std-Italic_1.ttf", 30));
-        player1CardsText.setFill(Color.valueOf("#D4AF37"));
-
-
-        //Player2CardsText
-        Text player2CardsText = new Text("Cards with jewel");
-        player2CardsTextHB.getChildren().add(player2CardsText);
-        player2CardsText.setFont(Font.loadFont("file:src/main/resources/AurelisADFNo2Std-Italic_1.ttf", 30));
-        player2CardsText.setFill(Color.valueOf("#D4AF37"));
-
-
-        //PlayerCardsCounters
-        loadPlayersCardsCounters();
 
         //Player1JewelsText
         Text player1JevelsText = new Text("Jewels");
@@ -953,50 +698,263 @@ public class SplendorApplication extends Application {
         player2JewelsText.setFill(Color.valueOf("#D4AF37"));
 
 
-        //PlayersCommitButtons
-        player1CommitButton.setOnAction((e) -> {
-            if(commitMove()){
-                gridPane1.setEffect(null);
-                gridPane3.setEffect(shadow);
-            };
-            if(finishGame()){
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException s) {
+        //Aristocrats
+        drawAristocrates();
+        loadAristocrats();
 
-                }
-                primaryStage.close();
-            };
+        aristocrat1Button.setStyle(BUTTON_STYLE);
+        aristocrat1Button.setOnMouseEntered(e -> aristocrat1Button.setStyle(HOVERED_BUTTON_STYLE));
+        aristocrat1Button.setOnMouseExited(e -> aristocrat1Button.setStyle(BUTTON_STYLE));
+        aristocrat1Button.setOnAction((e) -> {
+            if (aristocratsRepository.takeAristocrat(player, aristocrat1, 0)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                loadPlayersAristocrats();
+                loadAristocrats();
+                aristocratsTaken += 1;
+            }
         });
 
-        player1CommitButton.setStyle(COMMIT_BUTTON_STYLE);
-        player1CommitButton.setOnMouseEntered(e -> player1CommitButton.setEffect(shadow));
-        player1CommitButton.setOnMouseExited(e -> player1CommitButton.setEffect(null));
-        player1CommitButton.setText("Commit move");
-
-
-        player2CommitButton.setOnAction((e) -> {
-            if(commitMove()){
-                gridPane3.setEffect(null);
-                gridPane1.setEffect(shadow);
-            };
-            if(finishGame()){
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException s) {
-
-                }
-                primaryStage.close();
-            };
+        aristocrat2Button.setStyle(BUTTON_STYLE);
+        aristocrat2Button.setOnMouseEntered(e -> aristocrat2Button.setStyle(HOVERED_BUTTON_STYLE));
+        aristocrat2Button.setOnMouseExited(e -> aristocrat2Button.setStyle(BUTTON_STYLE));
+        aristocrat2Button.setOnAction((e) -> {
+            if (aristocratsRepository.takeAristocrat(player, aristocrat2, 1)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                loadPlayersAristocrats();
+                loadAristocrats();
+                aristocratsTaken += 1;
+            }
         });
 
-        player2CommitButton.setStyle(COMMIT_BUTTON_STYLE);
-        player2CommitButton.setOnMouseEntered(e -> player2CommitButton.setEffect(shadow));
-        player2CommitButton.setOnMouseExited(e -> player2CommitButton.setEffect(null));
-        player2CommitButton.setText("Commit move");
 
-        player1CommitHB.getChildren().add(player1CommitButton);
-        player2CommitHB.getChildren().add(player2CommitButton);
+        aristocrat3Button.setStyle(BUTTON_STYLE);
+        aristocrat3Button.setOnMouseEntered(e -> aristocrat3Button.setStyle(HOVERED_BUTTON_STYLE));
+        aristocrat3Button.setOnMouseExited(e -> aristocrat3Button.setStyle(BUTTON_STYLE));
+        aristocrat3Button.setOnAction((e) -> {
+            if (aristocratsRepository.takeAristocrat(player, aristocrat3, 2)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                loadPlayersAristocrats();
+                loadAristocrats();
+                aristocratsTaken += 1;
+            }
+        });
+
+        aristocrats.getChildren().addAll(aristocrat1Button, aristocrat2Button, aristocrat3Button);
+
+        //1LevelCards
+        draw1LevelCards();
+        load1LevelCards();
+
+        card1Level1Button.setStyle(BUTTON_STYLE);
+        card1Level1Button.setOnMouseEntered(e -> card1Level1Button.setStyle(HOVERED_BUTTON_STYLE));
+        card1Level1Button.setOnMouseExited(e -> card1Level1Button.setStyle(BUTTON_STYLE));
+        card1Level1Button.setOnAction((e) -> {
+            if (cards1LevelRepository.takeCard(player, cards1Level1, 0)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load1LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+        card1Level2Button.setStyle(BUTTON_STYLE);
+        card1Level2Button.setOnMouseEntered(e -> card1Level2Button.setStyle(HOVERED_BUTTON_STYLE));
+        card1Level2Button.setOnMouseExited(e -> card1Level2Button.setStyle(BUTTON_STYLE));
+        card1Level2Button.setOnAction((e) -> {
+            if (cards1LevelRepository.takeCard(player, cards1Level2, 1)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load1LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+        card1Level3Button.setStyle(BUTTON_STYLE);
+        card1Level3Button.setOnMouseEntered(e -> card1Level3Button.setStyle(HOVERED_BUTTON_STYLE));
+        card1Level3Button.setOnMouseExited(e -> card1Level3Button.setStyle(BUTTON_STYLE));
+        card1Level3Button.setOnAction((e) -> {
+            if (cards1LevelRepository.takeCard(player, cards1Level3, 2)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load1LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+        card1Level4Button.setStyle(BUTTON_STYLE);
+        card1Level4Button.setOnMouseEntered(e -> card1Level4Button.setStyle(HOVERED_BUTTON_STYLE));
+        card1Level4Button.setOnMouseExited(e -> card1Level4Button.setStyle(BUTTON_STYLE));
+        card1Level4Button.setOnAction((e) -> {
+            if (cards1LevelRepository.takeCard(player, cards1Level4, 3)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load1LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+        cards1.getChildren().addAll(card1Level1Button, card1Level2Button, card1Level3Button, card1Level4Button);
+
+
+        //2LevelCards
+        draw2LevelCards();
+        load2LevelCards();
+
+        card2Level1Button.setStyle(BUTTON_STYLE);
+        card2Level1Button.setOnMouseEntered(e -> card2Level1Button.setStyle(HOVERED_BUTTON_STYLE));
+        card2Level1Button.setOnMouseExited(e -> card2Level1Button.setStyle(BUTTON_STYLE));
+        card2Level1Button.setOnAction((e) -> {
+            if (cards2LevelRepository.takeCard(player, cards2Level1, 0)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load2LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+
+        card2Level2Button.setStyle(BUTTON_STYLE);
+        card2Level2Button.setOnMouseEntered(e -> card2Level2Button.setStyle(HOVERED_BUTTON_STYLE));
+        card2Level2Button.setOnMouseExited(e -> card2Level2Button.setStyle(BUTTON_STYLE));
+        card2Level2Button.setOnAction((e) -> {
+            if (cards2LevelRepository.takeCard(player, cards2Level2, 1)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load2LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+
+        card2Level3Button.setStyle(BUTTON_STYLE);
+        card2Level3Button.setOnMouseEntered(e -> card2Level3Button.setStyle(HOVERED_BUTTON_STYLE));
+        card2Level3Button.setOnMouseExited(e -> card2Level3Button.setStyle(BUTTON_STYLE));
+        card2Level3Button.setOnAction((e) -> {
+            if (cards2LevelRepository.takeCard(player, cards2Level3, 2)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load2LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+
+        card2Level4Button.setStyle(BUTTON_STYLE);
+        card2Level4Button.setOnMouseEntered(e -> card2Level4Button.setStyle(HOVERED_BUTTON_STYLE));
+        card2Level4Button.setOnMouseExited(e -> card2Level4Button.setStyle(BUTTON_STYLE));
+        card2Level4Button.setOnAction((e) -> {
+            if (cards2LevelRepository.takeCard(player, cards2Level4, 3)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load2LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+
+            }
+        });
+
+
+        cards2.getChildren().addAll(card2Level1Button, card2Level2Button, card2Level3Button, card2Level4Button);
+
+
+        //3LevelCards
+        draw3LevelCards();
+        load3LevelCards();
+
+        card3Level1Button.setStyle(BUTTON_STYLE);
+        card3Level1Button.setOnMouseEntered(e -> card3Level1Button.setStyle(HOVERED_BUTTON_STYLE));
+        card3Level1Button.setOnMouseExited(e -> card3Level1Button.setStyle(BUTTON_STYLE));
+        card3Level1Button.setOnAction((e) -> {
+            if (cards3LevelRepository.takeCard(player, cards3Level1, 0)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load3LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+        card3Level2Button.setStyle(BUTTON_STYLE);
+        card3Level2Button.setOnMouseEntered(e -> card3Level2Button.setStyle(HOVERED_BUTTON_STYLE));
+        card3Level2Button.setOnMouseExited(e -> card3Level2Button.setStyle(BUTTON_STYLE));
+        card3Level2Button.setOnAction((e) -> {
+            if (cards3LevelRepository.takeCard(player, cards3Level2, 1)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load3LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+
+        card3Level3Button.setStyle(BUTTON_STYLE);
+        card3Level3Button.setOnMouseEntered(e -> card3Level3Button.setStyle(HOVERED_BUTTON_STYLE));
+        card3Level3Button.setOnMouseExited(e -> card3Level3Button.setStyle(BUTTON_STYLE));
+        card3Level3Button.setOnAction((e) -> {
+            if (cards3LevelRepository.takeCard(player, cards3Level3, 2)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load3LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+        card3Level4Button.setStyle(BUTTON_STYLE);
+        card3Level4Button.setOnMouseEntered(e -> card3Level4Button.setStyle(HOVERED_BUTTON_STYLE));
+        card3Level4Button.setOnMouseExited(e -> card3Level4Button.setStyle(BUTTON_STYLE));
+        card3Level4Button.setOnAction((e) -> {
+            if (cards3LevelRepository.takeCard(player, cards3Level4, 3)) {
+                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
+                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
+                load3LevelCards();
+                loadPlayersCardsCounters();
+                loadPlayersJewelCounters();
+                cardTaken += 1;
+            }
+        });
+
+
+        cards3.getChildren().addAll(card3Level1Button, card3Level2Button, card3Level3Button, card3Level4Button);
+
+
+        //Player1CardsText&Counters
+        loadPlayersCardsCounters();
+
+        Text player1CardsText = new Text("Cards with jewel");
+        player1CardsTextHB.getChildren().add(player1CardsText);
+        player1CardsText.setFont(Font.loadFont("file:src/main/resources/AurelisADFNo2Std-Italic_1.ttf", 30));
+        player1CardsText.setFill(Color.valueOf("#D4AF37"));
+
+
+        Text player2CardsText = new Text("Cards with jewel");
+        player2CardsTextHB.getChildren().add(player2CardsText);
+        player2CardsText.setFont(Font.loadFont("file:src/main/resources/AurelisADFNo2Std-Italic_1.ttf", 30));
+        player2CardsText.setFill(Color.valueOf("#D4AF37"));
+
+
 
 
 
