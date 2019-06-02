@@ -1,6 +1,8 @@
 package com.kodilla.splendor;
 
 
+import com.kodilla.splendor.Creators.AristocratsCreator;
+import com.kodilla.splendor.Creators.PlayerCreator;
 import com.kodilla.splendor.Repository.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -62,19 +64,12 @@ public class SplendorApplication extends Application {
     //Aristocrats
     private AristocratsRepository aristocratsRepository = new AristocratsRepository();
     private AristocratsRepository savedAristocratsRepository;
-    private HBox aristocrats = new HBox();
+    private AristocratsCreator aristocratsCreator = new AristocratsCreator(player);
+    private HBox aristocrats = aristocratsCreator.getAristocrats();
     private HBox player1Aristocrats = new HBox();
     private HBox player2Aristocrats = new HBox();
     private HBox player1JewelsTextHB = new HBox();
     private HBox player2JewelsTextHB = new HBox();
-
-    private Aristocrats aristocrat1 = new Aristocrats();
-    private Aristocrats aristocrat2 = new Aristocrats();
-    private Aristocrats aristocrat3 = new Aristocrats();
-
-    private Button aristocrat1Button = new Button();
-    private Button aristocrat2Button = new Button();
-    private Button aristocrat3Button = new Button();
 
     //Cards
     private Cards1LevelRepository cards1LevelRepository = new Cards1LevelRepository();
@@ -132,11 +127,25 @@ public class SplendorApplication extends Application {
 
     public boolean finishGame() {
         if ((player1.getResult() >= 15 || player2.getResult() >= 15) && (player1.getMovesCounter() == player2.getMovesCounter())) {
-            Player winner;
-            if(player1.getResult() > player2.getResult()){
-                winner = player1;
-            } else {
+            Player winner = null;
+            if(player1.getResult() == player2.getResult()){
+                int player1CardNumber = player1.getCardCounter().entrySet().stream()
+                        .map(c -> c.getValue())
+                        .mapToInt(Integer::intValue)
+                        .sum();
+                int player2CardNumber = player2.getCardCounter().entrySet().stream()
+                        .map(c -> c.getValue())
+                        .mapToInt(Integer::intValue)
+                        .sum();
+                if(player1CardNumber > player2CardNumber) {
+                    winner = player1;
+                } else {
+                    winner = player2;
+                }
+            } else if(player2.getResult() > player1.getResult()) {
                 winner = player2;
+            } else {
+                winner = player1;
             }
             infoPopUp.display("INFO", "Game finished. The winner is " + winner.getName());
             return true;
@@ -169,7 +178,7 @@ public class SplendorApplication extends Application {
         cards3LevelRepository = savedCards3LevelRepository;
         jewelRepository = savedJewelRepository;
         loadPlayersCardsCounters();
-        loadPlayersAristocrats();
+        //loadPlayersAristocrats();
         loadPlayersJewelCounters();
     }
 
@@ -186,7 +195,9 @@ public class SplendorApplication extends Application {
             }
             saveCurrentStatus();
             ifCommited = true;
-
+        aristocratsCreator = new AristocratsCreator(player);
+        aristocratsCreator.loadAristocrats(player);
+        aristocrats = aristocratsCreator.getAristocrats();
         } else {
             rollBackMove();
             player1 = playerCreator.getPlayers().get(0);
@@ -379,65 +390,6 @@ public class SplendorApplication extends Application {
             System.out.println("No more cards to take");
         }
 
-    }
-
-
-    public void drawAristocrates() {
-        aristocratsRepository.drawThreeAristocrats();
-    }
-
-
-    public void loadAristocrats() {
-
-        try {
-            aristocrat1 = aristocratsRepository.getThreeAristocratsList().get(0);
-            aristocrat2 = aristocratsRepository.getThreeAristocratsList().get(1);
-            aristocrat3 = aristocratsRepository.getThreeAristocratsList().get(2);
-
-            ImageView aristocrat1ImgView = aristocrat1.getView();
-            ImageView aristocrat2ImgView = aristocrat2.getView();
-            ImageView aristocrat3ImgView = aristocrat3.getView();
-
-            aristocrat1Button.setGraphic(aristocrat1ImgView);
-            aristocrat2Button.setGraphic(aristocrat2ImgView);
-            aristocrat3Button.setGraphic(aristocrat3ImgView);
-
-            aristocrat1ImgView.setFitWidth(150);
-            aristocrat1ImgView.setFitHeight(150);
-
-            aristocrat2ImgView.setFitWidth(150);
-            aristocrat2ImgView.setFitHeight(150);
-
-            aristocrat3ImgView.setFitWidth(150);
-            aristocrat3ImgView.setFitHeight(150);
-
-        } catch (NullPointerException e) {
-            System.out.println("No more aristocrats to take");
-        }
-
-    }
-
-
-    public void loadPlayersAristocrats() {
-        player1Aristocrats.getChildren().clear();
-        player2Aristocrats.getChildren().clear();
-        player1.getAristocrats().stream()
-                .forEach(a -> {
-                    ImageView player1Aristocrat = new ImageView();
-                    player1Aristocrat.setImage(a.getView().getImage());
-                    player1Aristocrat.setFitWidth(150);
-                    player1Aristocrat.setFitHeight(150);
-                    player1Aristocrats.getChildren().add(player1Aristocrat);
-                });
-        player2.getAristocrats().stream()
-                .forEach(a -> {
-                    ImageView player2Aristocrat = new ImageView();
-                    player2Aristocrat.setImage(a.getView().getImage());
-                    player2Aristocrat.setImage(a.getView().getImage());
-                    player2Aristocrat.setFitWidth(150);
-                    player2Aristocrat.setFitHeight(150);
-                    player2Aristocrats.getChildren().add(player2Aristocrat);
-                });
     }
 
 
@@ -699,50 +651,7 @@ public class SplendorApplication extends Application {
 
 
         //Aristocrats
-        drawAristocrates();
-        loadAristocrats();
-
-        aristocrat1Button.setStyle(BUTTON_STYLE);
-        aristocrat1Button.setOnMouseEntered(e -> aristocrat1Button.setStyle(HOVERED_BUTTON_STYLE));
-        aristocrat1Button.setOnMouseExited(e -> aristocrat1Button.setStyle(BUTTON_STYLE));
-        aristocrat1Button.setOnAction((e) -> {
-            if (aristocratsRepository.takeAristocrat(player, aristocrat1, 0)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                loadPlayersAristocrats();
-                loadAristocrats();
-                aristocratsTaken += 1;
-            }
-        });
-
-        aristocrat2Button.setStyle(BUTTON_STYLE);
-        aristocrat2Button.setOnMouseEntered(e -> aristocrat2Button.setStyle(HOVERED_BUTTON_STYLE));
-        aristocrat2Button.setOnMouseExited(e -> aristocrat2Button.setStyle(BUTTON_STYLE));
-        aristocrat2Button.setOnAction((e) -> {
-            if (aristocratsRepository.takeAristocrat(player, aristocrat2, 1)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                loadPlayersAristocrats();
-                loadAristocrats();
-                aristocratsTaken += 1;
-            }
-        });
-
-
-        aristocrat3Button.setStyle(BUTTON_STYLE);
-        aristocrat3Button.setOnMouseEntered(e -> aristocrat3Button.setStyle(HOVERED_BUTTON_STYLE));
-        aristocrat3Button.setOnMouseExited(e -> aristocrat3Button.setStyle(BUTTON_STYLE));
-        aristocrat3Button.setOnAction((e) -> {
-            if (aristocratsRepository.takeAristocrat(player, aristocrat3, 2)) {
-                player1NameAndPoints.setText(players.get(0).getName() + ": " + players.get(0).getResult());
-                player2NameAndPoints.setText(players.get(1).getName() + ": " + players.get(1).getResult());
-                loadPlayersAristocrats();
-                loadAristocrats();
-                aristocratsTaken += 1;
-            }
-        });
-
-        aristocrats.getChildren().addAll(aristocrat1Button, aristocrat2Button, aristocrat3Button);
+        aristocratsCreator.loadAristocrats(player);
 
         //1LevelCards
         draw1LevelCards();
@@ -953,11 +862,6 @@ public class SplendorApplication extends Application {
         player2CardsTextHB.getChildren().add(player2CardsText);
         player2CardsText.setFont(Font.loadFont("file:src/main/resources/AurelisADFNo2Std-Italic_1.ttf", 30));
         player2CardsText.setFill(Color.valueOf("#D4AF37"));
-
-
-
-
-
 
     }
 

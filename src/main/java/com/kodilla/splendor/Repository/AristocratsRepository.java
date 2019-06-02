@@ -136,6 +136,11 @@ public class AristocratsRepository {
 
     }
 
+    public List<Aristocrats> getThreeAristocratsList() {
+        return threeAristocratsList;
+    }
+
+
     public void drawThreeAristocrats() {
         Aristocrats aristocrat1 = drawAristocrat();
         Aristocrats aristocrat2 = drawAristocrat();
@@ -144,10 +149,6 @@ public class AristocratsRepository {
         threeAristocratsList.add(aristocrat1);
         threeAristocratsList.add(aristocrat2);
         threeAristocratsList.add(aristocrat3);
-    }
-
-    public List<Aristocrats> getThreeAristocratsList() {
-        return threeAristocratsList;
     }
 
     public Aristocrats drawAristocrat() {
@@ -160,9 +161,10 @@ public class AristocratsRepository {
     }
 
 
-    public boolean takeAristocrat(Player player, Aristocrats aristocrat, int position) {
+    public boolean takeAristocrat(Player player, Aristocrats aristocrat) {
 
         boolean ifAristocratTaken = false;
+        int aristocratPosition = threeAristocratsList.indexOf(aristocrat);
 
         long costCheckCounter = aristocrat.getCost().entrySet().stream()
                 .filter(e -> player.getCardCounter().get(e.getKey()) >= e.getValue())
@@ -172,7 +174,7 @@ public class AristocratsRepository {
             player.setResult(player.getResult() + aristocrat.getValue());
             player.getAristocrats().add(aristocrat);
             ifAristocratTaken = true;
-            threeAristocratsList.set(position, drawAristocrat());
+            threeAristocratsList.set(aristocratPosition, drawAristocrat());
         }
 
         return ifAristocratTaken;

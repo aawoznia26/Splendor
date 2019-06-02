@@ -1,5 +1,6 @@
-package com.kodilla.splendor;
+package com.kodilla.splendor.Creators;
 
+import com.kodilla.splendor.Player;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ import java.util.List;
 public class PlayerCreator {
 
     private List<Player> players = new ArrayList<>();
+
 
     public List<Player> getPlayers() {
         return players;
