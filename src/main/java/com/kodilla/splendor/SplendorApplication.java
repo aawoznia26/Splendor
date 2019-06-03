@@ -129,20 +129,35 @@ public class SplendorApplication extends Application {
     InfoPopUp infoPopUp = new InfoPopUp();
 
 
-
     public boolean finishGame() {
         if ((player1.getResult() >= 15 || player2.getResult() >= 15) && (player1.getMovesCounter() == player2.getMovesCounter())) {
-            Player winner;
-            if(player1.getResult() > player2.getResult()){
-                winner = player1;
-            } else {
+            Player winner = null;
+            if(player1.getResult() == player2.getResult()){
+                int player1CardNumber = player1.getCardCounter().entrySet().stream()
+                        .map(c -> c.getValue())
+                        .mapToInt(Integer::intValue)
+                        .sum();
+                int player2CardNumber = player2.getCardCounter().entrySet().stream()
+                        .map(c -> c.getValue())
+                        .mapToInt(Integer::intValue)
+                        .sum();
+                if(player1CardNumber > player2CardNumber) {
+                    winner = player1;
+                } else {
+                    winner = player2;
+                }
+            } else if(player2.getResult() > player1.getResult()) {
                 winner = player2;
+            } else {
+                winner = player1;
             }
             infoPopUp.display("INFO", "Game finished. The winner is " + winner.getName());
             return true;
         }
         return false;
     }
+
+
 
     public void saveCurrentStatus() {
 
