@@ -2,6 +2,7 @@ package com.kodilla.splendor.Repository;
 
 import com.kodilla.splendor.Aristocrats;
 import com.kodilla.splendor.Colors;
+import com.kodilla.splendor.Move;
 import com.kodilla.splendor.Player;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -162,21 +163,22 @@ public class AristocratsRepository {
 
 
     public boolean takeAristocrat(Player player, Aristocrats aristocrat) {
-
         boolean ifAristocratTaken = false;
-        int aristocratPosition = threeAristocratsList.indexOf(aristocrat);
+        if(Move.validateMove("aristocrat")){
+            int aristocratPosition = threeAristocratsList.indexOf(aristocrat);
 
-        long costCheckCounter = aristocrat.getCost().entrySet().stream()
-                .filter(e -> player.getCardCounter().get(e.getKey()) >= e.getValue())
-                .count();
+            long costCheckCounter = aristocrat.getCost().entrySet().stream()
+                    .filter(e -> player.getCardCounter().get(e.getKey()) >= e.getValue())
+                    .count();
 
-        if (costCheckCounter == 5L) {
-            player.setResult(player.getResult() + aristocrat.getValue());
-            player.getAristocrats().add(aristocrat);
-            ifAristocratTaken = true;
-            threeAristocratsList.set(aristocratPosition, drawAristocrat());
+            if (costCheckCounter == 5L) {
+                player.setResult(player.getResult() + aristocrat.getValue());
+                player.getAristocrats().add(aristocrat);
+                ifAristocratTaken = true;
+                Move.setAristocratsTaken(Move.getAristocratsTaken() + 1);
+                threeAristocratsList.set(aristocratPosition, drawAristocrat());
+            }
         }
-
         return ifAristocratTaken;
     }
 }
