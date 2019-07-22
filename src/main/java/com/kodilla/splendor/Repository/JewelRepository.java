@@ -2,6 +2,7 @@ package com.kodilla.splendor.Repository;
 
 import com.kodilla.splendor.Colors;
 import com.kodilla.splendor.Jewel;
+import com.kodilla.splendor.Move;
 import com.kodilla.splendor.Player;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,11 +20,11 @@ public class JewelRepository {
     private Image emeraldImage = new Image("file:src/main/resources/stones/emerald.png");
     private Image rubyImage = new Image("file:src/main/resources/stones/ruby.png");
 
-    private Jewel diamond = new Jewel(Colors.WHITE, new ImageView(diamondImage), 4);
-    private Jewel sapphire = new Jewel(Colors.BLUE, new ImageView(sapphireImage), 4);
-    private Jewel onyx = new Jewel(Colors.BLACK, new ImageView(onyxImage), 4);
-    private Jewel emerald = new Jewel(Colors.GREEN, new ImageView(emeraldImage), 4);
-    private Jewel ruby = new Jewel(Colors.RED, new ImageView(rubyImage), 4);
+    private Jewel diamond = new Jewel(Colors.WHITE, new ImageView(diamondImage), 4, "diamond");
+    private Jewel sapphire = new Jewel(Colors.BLUE, new ImageView(sapphireImage), 4, "sapphire");
+    private Jewel onyx = new Jewel(Colors.BLACK, new ImageView(onyxImage), 4, "onyx");
+    private Jewel emerald = new Jewel(Colors.GREEN, new ImageView(emeraldImage), 4, "emerald");
+    private Jewel ruby = new Jewel(Colors.RED, new ImageView(rubyImage), 4, "ruby");
 
     public JewelRepository() {
         jewelList.add(diamond);
@@ -37,56 +38,33 @@ public class JewelRepository {
         return jewelList;
     }
 
-    public Image getDiamondImage() {
-        return diamondImage;
-    }
-
-    public Image getSapphireImage() {
-        return sapphireImage;
-    }
-
-    public Image getOnyxImage() {
-        return onyxImage;
-    }
-
-    public Image getEmeraldImage() {
-        return emeraldImage;
-    }
-
-    public Image getRubyImage() {
-        return rubyImage;
-    }
-
-    public Jewel getDiamond() {
-        return diamond;
-    }
-
-    public Jewel getSapphire() {
-        return sapphire;
-    }
-
-    public Jewel getOnyx() {
-        return onyx;
-    }
-
-    public Jewel getEmerald() {
-        return emerald;
-    }
-
-    public Jewel getRuby() {
-        return ruby;
-    }
-
     public void takeJewel(Player player, Colors color) {
 
         Jewel foundJewel = jewelList.stream()
                 .filter(j -> j.getColor() == color)
                 .findAny().get();
 
-        if (foundJewel.getNumber() > 0) {
+        if (foundJewel.getNumber() > 0 && Move.validateMove("jewel")) {
             foundJewel.setNumber(foundJewel.getNumber() - 1);
             int playerJewelCounter = player.getJewelCounter().get(color);
             player.getJewelCounter().replace(color, playerJewelCounter + 1);
+            switch (foundJewel.getName()) {
+                case "diamond":
+                    Move.setDiamondTaken(Move.getDiamondTaken() + 1);
+                    break;
+                case "sapphire":
+                    Move.setSapphireTaken(Move.getSapphireTaken() + 1);
+                    break;
+                case "onyx":
+                    Move.setOnyxTaken(Move.getOnyxTaken() +1);
+                    break;
+                case "emerald":
+                    Move.setEmeraldTaken(Move.getEmeraldTaken() + 1);
+                    break;
+                case "ruby":
+                    Move.setRubyTaken(Move.getRubyTaken() + 1);
+                    break;
+            }
         } else {
             System.out.println("There is no jewel to take");
         }

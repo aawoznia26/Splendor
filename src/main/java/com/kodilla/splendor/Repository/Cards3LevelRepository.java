@@ -2,6 +2,7 @@ package com.kodilla.splendor.Repository;
 
 import com.kodilla.splendor.Cards3Level;
 import com.kodilla.splendor.Colors;
+import com.kodilla.splendor.Move;
 import com.kodilla.splendor.Player;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,7 +10,7 @@ import javafx.scene.image.ImageView;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Cards3LevelRepository {
+public class Cards3LevelRepository implements CardsRepository{
 
     private List<Cards3Level> cardsList = new ArrayList<>();
     private List<Cards3Level> fourCards = new ArrayList<>();
@@ -274,7 +275,6 @@ public class Cards3LevelRepository {
         Cards3Level card3 = drawCard();
         Cards3Level card4 = drawCard();
 
-
         fourCards.add(card1);
         fourCards.add(card2);
         fourCards.add(card3);
@@ -292,9 +292,10 @@ public class Cards3LevelRepository {
     }
 
 
-    public boolean takeCard(Player player, Cards3Level card, int position) {
+    public boolean takeCard(Player player, Cards3Level card) {
 
         boolean ifCardTaken = false;
+        int cardPosition = fourCards.indexOf(card);
 
         Map<Colors, Integer> costAfterCards = card.getCost().entrySet().stream()
                 .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue() - player.getCardCounter().get(e.getKey())))
@@ -307,14 +308,15 @@ public class Cards3LevelRepository {
                 .count();
         long costAfterCardsSize = costAfterCards.size();
 
-        if (costCheckCounter == costAfterCardsSize) {
+        if (costCheckCounter == costAfterCardsSize && Move.validateMove("card")) {
             player.setResult(player.getResult() + card.getValue());
             int cardNumber = player.getCardCounter().get(card.getColor());
             player.getCardCounter().replace(card.getColor(), cardNumber +1 );
             costAfterCards.entrySet().stream()
                     .forEach(e -> player.getJewelCounter().replace(e.getKey(), player.getJewelCounter().get(e.getKey())-e.getValue()));
+            fourCards.set(cardPosition, drawCard());
             ifCardTaken = true;
-            fourCards.set(position, drawCard());
+            Move.setCardTaken(Move.getCardTaken() + 1);
         }
 
         return ifCardTaken;

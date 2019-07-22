@@ -2,6 +2,7 @@ package com.kodilla.splendor.Repository;
 
 import com.kodilla.splendor.Aristocrats;
 import com.kodilla.splendor.Colors;
+import com.kodilla.splendor.Move;
 import com.kodilla.splendor.Player;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -136,6 +137,11 @@ public class AristocratsRepository {
 
     }
 
+    public List<Aristocrats> getThreeAristocratsList() {
+        return threeAristocratsList;
+    }
+
+
     public void drawThreeAristocrats() {
         Aristocrats aristocrat1 = drawAristocrat();
         Aristocrats aristocrat2 = drawAristocrat();
@@ -144,10 +150,6 @@ public class AristocratsRepository {
         threeAristocratsList.add(aristocrat1);
         threeAristocratsList.add(aristocrat2);
         threeAristocratsList.add(aristocrat3);
-    }
-
-    public List<Aristocrats> getThreeAristocratsList() {
-        return threeAristocratsList;
     }
 
     public Aristocrats drawAristocrat() {
@@ -160,21 +162,23 @@ public class AristocratsRepository {
     }
 
 
-    public boolean takeAristocrat(Player player, Aristocrats aristocrat, int position) {
-
+    public boolean takeAristocrat(Player player, Aristocrats aristocrat) {
         boolean ifAristocratTaken = false;
+        if(Move.validateMove("aristocrat")){
+            int aristocratPosition = threeAristocratsList.indexOf(aristocrat);
 
-        long costCheckCounter = aristocrat.getCost().entrySet().stream()
-                .filter(e -> player.getCardCounter().get(e.getKey()) >= e.getValue())
-                .count();
+            long costCheckCounter = aristocrat.getCost().entrySet().stream()
+                    .filter(e -> player.getCardCounter().get(e.getKey()) >= e.getValue())
+                    .count();
 
-        if (costCheckCounter == 5L) {
-            player.setResult(player.getResult() + aristocrat.getValue());
-            player.getAristocrats().add(aristocrat);
-            ifAristocratTaken = true;
-            threeAristocratsList.set(position, drawAristocrat());
+            if (costCheckCounter == 5L) {
+                player.setResult(player.getResult() + aristocrat.getValue());
+                player.getAristocrats().add(aristocrat);
+                ifAristocratTaken = true;
+                Move.setAristocratsTaken(Move.getAristocratsTaken() + 1);
+                threeAristocratsList.set(aristocratPosition, drawAristocrat());
+            }
         }
-
         return ifAristocratTaken;
     }
 }
