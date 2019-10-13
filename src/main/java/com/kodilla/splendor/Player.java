@@ -19,17 +19,17 @@ public class Player {
         this.name = name;
         this.result = result;
 
-        cardCounter.put(Colors.BLACK, 5);
-        cardCounter.put(Colors.BLUE, 5);
-        cardCounter.put(Colors.RED, 5);
-        cardCounter.put(Colors.WHITE, 5);
-        cardCounter.put(Colors.GREEN, 5);
+        cardCounter.put(Colors.BLACK, 0);
+        cardCounter.put(Colors.BLUE, 0);
+        cardCounter.put(Colors.RED, 0);
+        cardCounter.put(Colors.WHITE, 0);
+        cardCounter.put(Colors.GREEN, 0);
 
-        jewelCounter.put(Colors.BLACK, 10);
-        jewelCounter.put(Colors.BLUE, 10);
-        jewelCounter.put(Colors.RED, 10);
-        jewelCounter.put(Colors.WHITE, 10);
-        jewelCounter.put(Colors.GREEN, 10);
+        jewelCounter.put(Colors.BLACK, 0);
+        jewelCounter.put(Colors.BLUE, 0);
+        jewelCounter.put(Colors.RED, 0);
+        jewelCounter.put(Colors.WHITE, 0);
+        jewelCounter.put(Colors.GREEN, 0);
 
     }
 

@@ -1,10 +1,7 @@
 package com.kodilla.splendor;
 
 import com.kodilla.splendor.Repository.*;
-import com.kodilla.splendor.Services.AristocratsService;
-import com.kodilla.splendor.Services.CardsService;
-import com.kodilla.splendor.Services.JewelService;
-import com.kodilla.splendor.Services.PlayerService;
+import com.kodilla.splendor.Services.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 
 
 public class SplendorApplication extends Application {
@@ -66,6 +64,11 @@ public class SplendorApplication extends Application {
     private HBox player2Cards = cardsService.getPlayer2Cards();
     private HBox player1CardsTextHB = cardsService.getPlayer1CardsTextHB();
     private HBox player2CardsTextHB = cardsService.getPlayer2CardsTextHB();
+
+    //Instructions
+    private InstructionsService instructionsService = new InstructionsService();
+    private Button instructionsButton = new Button();
+    private HBox instructionsHB = new HBox();
 
     //the Rest
     private GridPane grid = new GridPane();
@@ -168,6 +171,7 @@ public class SplendorApplication extends Application {
         gridPane2.add(cards2, 0, 2, 1, 1);
         gridPane2.add(cards3, 0, 1, 1, 1);
         gridPane2.add(jewels, 0, 4, 1, 1);
+        gridPane2.add(instructionsHB, 0, 5, 1, 1);
 
         gridPane3.add(player2NameAndPointsHB, 0, 0, 1, 1);
         gridPane3.add(player2Jewels, 0, 6, 1, 1);
@@ -195,7 +199,7 @@ public class SplendorApplication extends Application {
         player2CommitHB.setAlignment(Pos.BOTTOM_RIGHT);
         player2CommitHB.setPrefHeight(150);
         player2CommitHB.setPadding(new Insets(30, 30, 30, 30));
-        final String COMMIT_BUTTON_STYLE = "-fx-background-color: black; -fx-text-fill: #D4AF37;-fx-font-size: 20";
+        final String BUTTON_STYLE = "-fx-background-color: black; -fx-text-fill: #D4AF37;-fx-font-size: 20";
 
         //Cards
         player1CardsGridPane.setAlignment(Pos.CENTER);
@@ -209,7 +213,7 @@ public class SplendorApplication extends Application {
         primaryStage.show();
 
         //MoveCommitButtons
-        player1CommitButton.setStyle(COMMIT_BUTTON_STYLE);
+        player1CommitButton.setStyle(BUTTON_STYLE);
         player1CommitButton.setOnMouseEntered(e -> player1CommitButton.setEffect(shadow));
         player1CommitButton.setOnMouseExited(e -> player1CommitButton.setEffect(null));
         player1CommitButton.setText("Commit move");
@@ -225,7 +229,7 @@ public class SplendorApplication extends Application {
             };
         });
 
-        player2CommitButton.setStyle(COMMIT_BUTTON_STYLE);
+        player2CommitButton.setStyle(BUTTON_STYLE);
         player2CommitButton.setOnMouseEntered(e -> player2CommitButton.setEffect(shadow));
         player2CommitButton.setOnMouseExited(e -> player2CommitButton.setEffect(null));
         player2CommitButton.setText("Commit move");
@@ -241,8 +245,21 @@ public class SplendorApplication extends Application {
             };
         });
 
+        //Instructions
+        instructionsButton.setStyle(BUTTON_STYLE);
+        instructionsButton.setOnMouseEntered(e -> instructionsButton.setEffect(shadow));
+        instructionsButton.setOnMouseExited(e -> instructionsButton.setEffect(null));
+        instructionsButton.setText("Instructions");
+        instructionsButton.setOnAction((e) -> {
+            instructionsService.displayInstructions();
+        });
+        instructionsHB.getChildren().add(instructionsButton);
+        instructionsHB.setAlignment(Pos.CENTER);
+
+
         player1CommitHB.getChildren().add(player1CommitButton);
         player2CommitHB.getChildren().add(player2CommitButton);
+
 
         aristocratsService.initialAristocratsLoad(player);
         jewelService.loadJewels(player);
