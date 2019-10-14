@@ -7,12 +7,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 
 
 public class SplendorApplication extends Application {
@@ -70,17 +72,24 @@ public class SplendorApplication extends Application {
     private Button instructionsButton = new Button();
     private HBox instructionsHB = new HBox();
 
+    //FinishGame
+    private final Stage window = new Stage();
+    private VBox infoVbox = new VBox(10);
+    private Scene infoScene = new Scene(infoVbox);
+    private Label winnerLabel = new Label();
+    private Button finishGameButton = new Button();
+
     //the Rest
     private GridPane grid = new GridPane();
     private GridPane player1CardsGridPane = new GridPane();
     private GridPane player2CardsGridPane = new GridPane();
     private DropShadow shadow = new DropShadow();
-    private InfoPopUp infoPopUp = new InfoPopUp();
     private GridPane gridPane1 = new GridPane();
     private GridPane gridPane2 = new GridPane();
     private GridPane gridPane3 = new GridPane();
+    final String BUTTON_STYLE = "-fx-background-color: black; -fx-text-fill: #D4AF37;-fx-font-size: 20";
 
-    public boolean finishGame() {
+    public Result finishGame() {
         Player player1 = playerService.getPlayers().get(0);
         Player player2 = playerService.getPlayers().get(1);
         if ((player1.getResult() >= 15 || player2.getResult() >= 15) && (player1.getMovesCounter() == player2.getMovesCounter())) {
@@ -104,10 +113,9 @@ public class SplendorApplication extends Application {
             } else {
                 winner = player1;
             }
-            infoPopUp.display("INFO", "Game finished. The winner is " + winner.getName());
-            return true;
+            return new Result(true, winner);
         }
-        return false;
+        return new Result(false);
     }
 
     public boolean commitMove() {
@@ -139,6 +147,28 @@ public class SplendorApplication extends Application {
 
         }
         return ifCommited;
+    }
+
+    public void displayWinnerAndFinishGame(String winnerName) {
+
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("FinishGame");
+        window.setMaxWidth(900);
+
+        winnerLabel.setText("Game finished. The winner is " + winnerName);
+        winnerLabel.setFont(Font.loadFont("file:src/main/resources/AurelisADFNo2Std-Italic_1.ttf", 30));
+        winnerLabel.setWrapText(true);
+        winnerLabel.setMaxWidth(800);
+        winnerLabel.setTextFill(Color.valueOf("#D4AF37"));
+
+        infoVbox.setStyle("-fx-background-color : black;");
+        infoVbox.setAlignment(Pos.CENTER);
+        infoVbox.setPadding(new Insets(10, 50, 50, 50));
+        infoVbox.getChildren().addAll(winnerLabel, finishGameButton);
+
+        window.setScene(infoScene);
+        window.showAndWait();
+
     }
 
     @Override
@@ -199,7 +229,6 @@ public class SplendorApplication extends Application {
         player2CommitHB.setAlignment(Pos.BOTTOM_RIGHT);
         player2CommitHB.setPrefHeight(150);
         player2CommitHB.setPadding(new Insets(30, 30, 30, 30));
-        final String BUTTON_STYLE = "-fx-background-color: black; -fx-text-fill: #D4AF37;-fx-font-size: 20";
 
         //Cards
         player1CardsGridPane.setAlignment(Pos.CENTER);
@@ -224,8 +253,8 @@ public class SplendorApplication extends Application {
                 gridPane3.setEffect(shadow);
                 gridPane3.setStyle("-fx-background-color: rgba(139, 0, 0, 0.5); -fx-background-radius: 10; -fx-border-color: #D4AF37; -fx-border-radius: 10;");
             };
-            if(finishGame()){
-                primaryStage.close();
+            if(finishGame().isResult()){
+                displayWinnerAndFinishGame(finishGame().getWinner().getName());
             };
         });
 
@@ -240,10 +269,13 @@ public class SplendorApplication extends Application {
                 gridPane1.setEffect(shadow);
                 gridPane1.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10; -fx-border-color: #D4AF37; -fx-border-radius: 10;");
             } ;
-            if(finishGame()){
-                primaryStage.close();
+            if(finishGame().isResult()){
+                displayWinnerAndFinishGame(finishGame().getWinner().getName());
             };
         });
+
+        player1CommitHB.getChildren().add(player1CommitButton);
+        player2CommitHB.getChildren().add(player2CommitButton);
 
         //Instructions
         instructionsButton.setStyle(BUTTON_STYLE);
@@ -256,10 +288,21 @@ public class SplendorApplication extends Application {
         instructionsHB.getChildren().add(instructionsButton);
         instructionsHB.setAlignment(Pos.CENTER);
 
-
-        player1CommitHB.getChildren().add(player1CommitButton);
-        player2CommitHB.getChildren().add(player2CommitButton);
-
+        //FinishGame
+        finishGameButton.setStyle(BUTTON_STYLE);
+        finishGameButton.setOnMouseEntered(e -> finishGameButton.setEffect(shadow));
+        finishGameButton.setOnMouseExited(e -> finishGameButton.setEffect(null));
+        finishGameButton.setText("Finish game");
+        finishGameButton.setOnAction((e) -> {
+            try {
+                window.close();
+                primaryStage.close();
+                SplendorApplication app=new SplendorApplication();
+                app.start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         aristocratsService.initialAristocratsLoad(player);
         jewelService.loadJewels(player);

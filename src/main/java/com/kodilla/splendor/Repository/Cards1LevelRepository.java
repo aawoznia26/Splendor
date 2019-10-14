@@ -291,9 +291,9 @@ public class Cards1LevelRepository implements CardsRepository{
         _black_2w_2gCost.put(Colors.WHITE, 2);
 
         _blue_3bcCost.put(Colors.BLUE, 0);
-        _blue_3bcCost.put(Colors.BLACK, 0);
+        _blue_3bcCost.put(Colors.BLACK, 3);
         _blue_3bcCost.put(Colors.RED, 0);
-        _blue_3bcCost.put(Colors.GREEN, 3);
+        _blue_3bcCost.put(Colors.GREEN, 0);
         _blue_3bcCost.put(Colors.WHITE, 0);
 
         _blue__1b_3g_1rCost.put(Colors.BLUE, 1);
